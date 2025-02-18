@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const dotenv = require('dotenv');
 const { default: merge } = require('webpack-merge');
 const common = require('./webpack.common');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // 加载环境变量
 const env = dotenv.config({
@@ -37,6 +38,7 @@ module.exports = merge(common, {
       }),
       new webpack.DefinePlugin({
           'process.env': JSON.stringify(env)
-      })  
+      }),
+      new BundleAnalyzerPlugin()
     ]
-};)
+});
