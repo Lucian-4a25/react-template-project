@@ -35,19 +35,6 @@ module.exports = {
         ]
       },
       {
-        test: /\.css$/,
-        use: [
-          isProd ? {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  // 如果需要，可以在这里添加公共路径配置
-                  // publicPath: '../'
-                },
-            } : 'style-loader',
-            'css-loader'
-        ]
-      },
-      {
         test: /\.(png|svg|jpg|jpeg|gif)$/,
         // dependency: { not: ['url'] },
         type: 'asset/resource',
@@ -81,17 +68,5 @@ module.exports = {
       template: './public/index.html',
       filename: 'index.html'
     }),
-    new MiniCssExtractPlugin({
-        filename: 'static/styles/[name].[contenthash].css', // 输出的 CSS 文件名
-        chunkFilename: 'static/styles/[name].[contenthash].css', // 用于代码分割的 CSS 块文件名
-    }),
-  ],
-  devServer: {
-    historyApiFallback: true,
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    port: 3000,
-    hot: true
-  }
+  ]
 };
