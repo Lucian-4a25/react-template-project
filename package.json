@@ -27,6 +27,7 @@
     "@babel/preset-typescript": "^7.26.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
     "compression-webpack-plugin": "^11.1.0",
     "cross-env": "^7.0.3",
@@ -34,6 +35,11 @@
     "dotenv": "^16.4.7",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
+    "postcss": "^8.5.2",
+    "postcss-loader": "^8.1.1",
+    "postcss-preset-env": "^10.1.4",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.11",
     "ts-loader": "^9.5.2",
@@ -43,5 +49,11 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0",
     "webpack-merge": "^6.0.1"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "> 0.2%",
+    "IE 10"
+  ]
 }

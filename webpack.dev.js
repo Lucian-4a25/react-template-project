@@ -21,6 +21,39 @@ module.exports = merge(common, {
           'style-loader',
           'css-loader'
         ]
+      },
+      // 新增 SCSS 规则
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: false,
+              postcssOptions: {
+                plugins: [
+                  'autoprefixer', // 自动添加浏览器前缀
+                  'postcss-preset-env', // 使用最新的 CSS 特性
+                ],
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: false,
+              sassOptions: {
+                outputStyle: 'compressed', // 压缩 CSS 输出
+              },
+            },
+          },
+        ],
       }
     ]
   },

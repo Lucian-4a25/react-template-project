@@ -30,6 +30,39 @@ module.exports = merge(common, {
              },
              'css-loader'
           ]
+        },
+        // 新增 SCSS 规则
+        {
+          test: /\.s[ac]ss$/i,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: 'css-loader',
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: false,
+                postcssOptions: {
+                  plugins: [
+                    'autoprefixer', // 自动添加浏览器前缀
+                    'postcss-preset-env', // 使用最新的 CSS 特性
+                  ],
+                },
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: false,
+                sassOptions: {
+                  outputStyle: 'compressed', // 压缩 CSS 输出
+                },
+              },
+            },
+          ],
         }
       ]
     },
@@ -67,7 +100,8 @@ module.exports = merge(common, {
             test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
             name: 'react',
             priority: 100,
-            maxSize: 2440000,
+            maxSize: 1000 * 1000,
+            enforce: true,
             reuseExistingChunk: true,
           },
           // 添加更多的拆分，如 UI 库，工具库等...

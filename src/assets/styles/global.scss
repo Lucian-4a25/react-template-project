@@ -1,0 +1,15 @@
+.test-postcss {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    backdrop-filter: blur(10px);
+    
+    .child {
+      appearance: none;
+      transition: transform 0.3s;
+      
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+}
