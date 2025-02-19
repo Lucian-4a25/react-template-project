@@ -12,7 +12,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 // 加载环境变量
 const env = dotenv.config({
     path: path.resolve(__dirname, '.env.production')
-}).parsed;    
+}).parsed;
 
 module.exports = merge(common, {
     mode: 'production',
