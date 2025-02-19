@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const { default: merge } = require('webpack-merge');
@@ -39,6 +41,69 @@ module.exports = merge(common, {
       new webpack.DefinePlugin({
           'process.env': JSON.stringify(env)
       }),
-      new BundleAnalyzerPlugin()
-    ]
+      // 开启 Gzip 压缩
+      new CompressionPlugin({
+        algorithm: 'gzip',
+        test: /\.(js|css|html|svg)$/,
+        threshold: 10240, // 只压缩 10kb 以上的文件
+        minRatio: 0.8, // 只有压缩率比这个值小的资源才会被处理
+      }),
+      // 打包分析
+      process.env.ANALYZE && new BundleAnalyzerPlugin(),
+    ].filter(Boolean),
+
+    optimization: {
+      // 代码分割配置
+      splitChunks: {
+        chunks: 'all',
+        minSize: 20000, // 生成 chunk 的最小体积 20kb
+        maxSize: 244000, // chunk 的最大体积 244kb
+        minChunks: 1, // 最小被引用次数
+        maxAsyncRequests: 30, // 按需加载时的最大并行请求数
+        maxInitialRequests: 30, // 入口点的最大并行请求数
+        automaticNameDelimiter: '~', // 名称分隔符
+        cacheGroups: {
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+            name: 'react',
+            priority: 100,
+            maxSize: 2440000,
+            reuseExistingChunk: true,
+          },
+          // 添加更多的拆分，如 UI 库，工具库等...
+          defaultVendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          commons: {
+            name: 'commons',
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+        },
+      },
+      // 运行时代码分离，便于优化打包后的代码，避免业务代码变更影响导致其包含的 runtime 代码也无法重复使用的问题，更好的利用缓存
+      runtimeChunk: {
+        name: 'runtime',
+      },
+      // 压缩配置
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true, // 开启并行压缩
+          terserOptions: {
+            compress: {
+              drop_console: true, // 删除 console
+              drop_debugger: true, // 删除 debugger
+            },
+            format: {
+              comments: false, // 删除注释
+            },
+          },
+          extractComments: false, // 不将注释提取到单独的文件
+        }),
+      ],
+    },  
 });
